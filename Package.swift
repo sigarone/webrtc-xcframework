@@ -4,8 +4,8 @@
 import PackageDescription
 
 // AES-256 fork (sigarone/webrtc-xcframework, branch aes256-livekit, tag
-// 144.7559.10-aes256-livekit) — points the binaryTarget at a drop-in
-// LiveKitWebRTC.xcframework built by sigarone/webrtc-aes256-build's
+// 144.7559.10-aes256-livekit-native-pli) — points the binaryTarget at a
+// drop-in LiveKitWebRTC.xcframework built by sigarone/webrtc-aes256-build's
 // build-livekit-ios.yml: SAME LK-symbol-prefixing (apple_prefix.patch,
 // vendored verbatim from webrtc-sdk/webrtc-build, the same repo
 // livekit/webrtc-xcframework's own README says its releases are built
@@ -15,6 +15,14 @@ import PackageDescription
 // AES-128-only FrameCryptor once the app supplies a 32-byte shared
 // key). Upstream's own 144.7559.10 tag/release is untouched; this is
 // an ADDITIONAL tag on the fork, not a rewrite of history.
+//
+// Bumped 2026-08-26: same 144.7559.10 WebRTC source, ADDED native-pli.patch
+// (W-NATIVEPLI) — the unconditional, rate-limited FrameCryptionState
+// .kDecryptionFailed notification on a real decrypt-tag-mismatch, ported
+// from Android's 2026-08-25 AAR rebuild to close the group-call iOS/Android
+// parity gap (see qaudion-android-new's `project_aar_rebuild_2026_08_25`
+// and qaudion-ios's `project_aar_ios_parity_audit_2026_08_26` memory files).
+// No source/version change beyond that one added patch.
 //
 // Bumped 2026-07-28 from 144.7559.03 to 144.7559.10 (to unblock
 // client-sdk-swift 2.13.1-aes256-raw -> 2.15.1-aes256-raw, which
@@ -44,8 +52,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "LiveKitWebRTC",
-            url: "https://github.com/sigarone/webrtc-aes256-build/releases/download/webrtc-ios-aes256-livekit-m144-7559.10/LiveKitWebRTC.xcframework.zip",
-            checksum: "1857a77569cc43b48ab31717a1738edc0a6c81feafc3eee5d581acc818fb0564"
+            url: "https://github.com/sigarone/webrtc-aes256-build/releases/download/webrtc-ios-aes256-livekit-m144-native-pli/LiveKitWebRTC.xcframework.zip",
+            checksum: "fd6eb260aba11fa2e3ce615d96484fbecd7146263e3c10700d74d894b620ce4a"
         ),
     ]
 )
