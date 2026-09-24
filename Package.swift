@@ -4,7 +4,7 @@
 import PackageDescription
 
 // AES-256 fork (sigarone/webrtc-xcframework, branch aes256-livekit, tag
-// 144.7559.10-aes256-livekit-native-pli-2) — points the binaryTarget at a
+// 144.7559.10-aes256-livekit-native-pli-3) — points the binaryTarget at a
 // drop-in LiveKitWebRTC.xcframework built by sigarone/webrtc-aes256-build's
 // build-livekit-ios.yml: SAME LK-symbol-prefixing (apple_prefix.patch,
 // vendored verbatim from webrtc-sdk/webrtc-build, the same repo
@@ -15,6 +15,19 @@ import PackageDescription
 // AES-128-only FrameCryptor once the app supplies a 32-byte shared
 // key). Upstream's own 144.7559.10 tag/release is untouched; this is
 // an ADDITIONAL tag on the fork, not a rewrite of history.
+//
+// Bumped 2026-09-25 (-native-pli-2 -> -native-pli-3): SECURITY rebuild. Upstream
+// webrtc-sdk/webrtc (api/crypto/frame_crypto_transformer.cc) prints the
+// frame-cryptor secret, salt and DERIVED AES key at RTC_LOG(LS_INFO) in every
+// build up to m150; sigarone/webrtc-aes256-build's no-key-log.patch removes
+// both statements. Same WebRTC source commit (sigarone/webrtc
+// f47af7bc9658-livekit-aes256-7559.10), same aes256 + native-pli + LK-prefix
+// patches, same Xcode 16.4.0 / macos-15-arm64 image as -native-pli-2; only the
+// two log statements are gone (the build's gate scans every Mach-O slice for
+// derived_key / "slat << " / raw_key: 0 hits). Release
+// webrtc-ios-aes256-livekit-m144-native-pli-nokeylog, built from
+// sigarone/webrtc-aes256-build d22f11c (run 36068442850). The -native-pli-2 tag
+// and its release are untouched and remain the rollback.
 //
 // Bumped 2026-08-26 (again, -native-pli -> -native-pli-2): the first
 // -native-pli build was missing Headers/RTCAudioProcessingState.h
@@ -71,8 +84,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "LiveKitWebRTC",
-            url: "https://github.com/sigarone/webrtc-aes256-build/releases/download/webrtc-ios-aes256-livekit-m144-native-pli-2/LiveKitWebRTC.xcframework.zip",
-            checksum: "b7a999c1ceb087dc818b28f9d65923e62e7d7b17bfcb8e78ed497eed9e14e96e"
+            url: "https://github.com/sigarone/webrtc-aes256-build/releases/download/webrtc-ios-aes256-livekit-m144-native-pli-nokeylog/LiveKitWebRTC.xcframework.zip",
+            checksum: "c03e62141d7c7989a250317e26d4c3339eb62c34429b808b77383915a76a3dfc"
         ),
     ]
 )
